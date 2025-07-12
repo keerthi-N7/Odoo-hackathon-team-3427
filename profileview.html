@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>View Profile</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #2B4B54;
+      color: white;
+      padding: 0;
+      margin: 0;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: flex-end;
+      background-color: #5C7A73;
+      padding: 10px 20px;
+    }
+
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1em;
+    }
+
+    .navbar a:hover {
+      text-decoration: underline;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 30px auto;
+      background-color: #5C7A73;
+      padding: 20px;
+      border-radius: 10px;
+    }
+
+    h1 {
+      color: #E9F5EF;
+      text-align: center;
+    }
+
+    .field {
+      margin-bottom: 15px;
+    }
+
+    .label {
+      font-weight: bold;
+      color: #E9F5EF;
+    }
+
+    .value {
+      margin-top: 5px;
+      padding: 10px;
+      background-color: #E9F5EF;
+      color: #2B4B54;
+      border-radius: 5px;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .chip {
+      background-color: #E9F5EF;
+      color: #2B4B54;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-weight: bold;
+    }
+
+    .btn {
+      background-color: #46C8BE;
+      color: white;
+      padding: 10px 20px;
+      font-weight: bold;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 20px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Home Button Nav -->
+  <div class="navbar">
+    <a href="home.html">Home</a>
+  </div>
+
+  <div class="container">
+    <h1>User Profile</h1>
+    <div class="field"><div class="label">Name:</div><div class="value" id="name"></div></div>
+    <div class="field"><div class="label">Location:</div><div class="value" id="location"></div></div>
+    <div class="field"><div class="label">Availability:</div><div class="value" id="availability"></div></div>
+    <div class="field"><div class="label">Profile Type:</div><div class="value" id="profile"></div></div>
+    <div class="field"><div class="label">LinkedIn:</div><div class="value" id="linkedin"></div></div>
+    <div class="field">
+      <div class="label">Skills Offered:</div>
+      <div class="chips" id="skillsOffered"></div>
+    </div>
+    <div class="field">
+      <div class="label">Skills Wanted:</div>
+      <div class="chips" id="skillsWanted"></div>
+    </div>
+    <div class="field"><div class="label">Verified:</div><div class="value" id="verified"></div></div>
+
+    <button class="btn" onclick="editProfile()">Edit Profile</button>
+  </div>
+
+  <script>
+    const data = JSON.parse(localStorage.getItem("userProfile"));
+    if (data) {
+      document.getElementById("name").textContent = data.name || "";
+      document.getElementById("location").textContent = data.location || "";
+      document.getElementById("availability").textContent = data.availability || "";
+      document.getElementById("profile").textContent = data.profile || "";
+      document.getElementById("linkedin").textContent = data.linkedin || "";
+      document.getElementById("verified").textContent = data.verified ? "✔ Verified" : "✖ Not Verified";
+
+      data.skillsOffered.forEach(skill => {
+        const chip = document.createElement("div");
+        chip.className = "chip";
+        chip.textContent = skill;
+        document.getElementById("skillsOffered").appendChild(chip);
+      });
+
+      data.skillsWanted.forEach(skill => {
+        const chip = document.createElement("div");
+        chip.className = "chip";
+        chip.textContent = skill;
+        document.getElementById("skillsWanted").appendChild(chip);
+      });
+    }
+
+    function editProfile() {
+      window.location.href = "user profile.html";
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Profile - SkillSwap</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link href="https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --dark-teal: rgb(43, 75, 84);
+      --muted-teal: rgb(92, 122, 115);
+      --sky-blue: rgb(50, 153, 197);
+      --turquoise: rgb(70, 200, 190);
+      --off-white-mint: rgb(233, 245, 239);
+    }
+
+    body {
+      font-family: 'Architects Daughter', cursive;
+      background-color: var(--dark-teal);
+      color: var(--off-white-mint);
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 2px solid var(--off-white-mint);
+      border-radius: 15px 15px 0 0;
+      padding: 1rem 2rem;
+    }
+
+    .nav-links a {
+      color: var(--off-white-mint);
+      margin-left: 1.5rem;
+      text-decoration: none;
+      border-bottom: 2px solid var(--off-white-mint);
+    }
+
+    .profile-container {
+      border: 2px solid var(--off-white-mint);
+      border-top: none;
+      border-radius: 0 0 15px 15px;
+      padding: 2rem;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    .info {
+      max-width: 60%;
+    }
+
+    .info h2 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .info p {
+      font-size: 1.2rem;
+      margin: 1rem 0;
+    }
+
+    .request-btn {
+      background-color: var(--turquoise);
+      color: white;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 10px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      margin-bottom: 1rem;
+    }
+
+    .profile-photo {
+      width: 200px;
+      height: 200px;
+      border: 3px solid var(--off-white-mint);
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: var(--off-white-mint);
+    }
+
+    .popup,
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0,0,0,0.5);
+      z-index: 999;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .popup-content,
+    .modal-content {
+      background-color: var(--muted-teal);
+      color: white;
+      padding: 2rem;
+      border-radius: 12px;
+      text-align: center;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .modal-content {
+      width: 300px;
+    }
+
+    .modal-content select,
+    .modal-content textarea {
+      width: 100%;
+      margin-top: 10px;
+      padding: 8px;
+      border-radius: 5px;
+      border: none;
+      font-family: inherit;
+    }
+
+    .modal-content button {
+      margin-top: 15px;
+      background-color: var(--sky-blue);
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    footer {
+      text-align: center;
+      color: var(--muted-teal);
+      margin-top: 3rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div><strong>Skill Swap Platform</strong></div>
+    <div class="nav-links">
+      <a href="swaprequest.html">Swap request</a>
+      <a href="Home.html">Home</a>
+      <img src="https://via.placeholder.com/40" style="border-radius: 50%; vertical-align: middle;">
+    </div>
+  </header>
+
+  <div class="profile-container">
+    <div class="info">
+      <button class="request-btn" onclick="openRequestModal()">Request</button>
+      <h2>Marc Demo</h2>
+      <p><strong>Skills Offered:</strong> Singing, Video Editing</p>
+      <p><strong>Skills Wanted:</strong> Photoshop</p>
+      <div class="feedback">
+        <p><strong>Rating & Feedback:</strong> ⭐⭐⭐⭐☆<br/>"Very talented, great to collaborate with!"</p>
+      </div>
+    </div>
+    <div class="profile-photo">Profile<br/>Photo</div>
+  </div>
+
+  <!-- Request Modal -->
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <label>Choose one of your offered skills</label>
+      <select id="offeredSkill">
+        <option>Singing</option>
+        <option>Video Editing</option>
+      </select>
+
+      <label style="margin-top: 1rem;">Choose one of their wanted skills</label>
+      <select id="wantedSkill">
+        <option>Photoshop</option>
+      </select>
+
+      <label style="margin-top: 1rem;">Message</label>
+      <textarea rows="4" id="message"></textarea>
+
+      <button onclick="submitRequest()">Submit</button>
+    </div>
+  </div>
+
+  <!-- Confirmation Popup -->
+  <div id="popup" class="popup">
+    <div class="popup-content">
+      🎉 Request Submitted!
+    </div>
+  </div>
+
+  <footer>© 2025 SkillSwap. All rights reserved.</footer>
+
+  <script>
+    function openRequestModal() {
+      document.getElementById('modal').style.display = 'flex';
+    }
+
+    function submitRequest() {
+      const offered = document.getElementById('offeredSkill').value;
+      const wanted = document.getElementById('wantedSkill').value;
+      const msg = document.getElementById('message').value;
+
+      console.log("Request sent:", offered, wanted, msg);
+
+      document.getElementById('modal').style.display = 'none';
+      document.getElementById('popup').style.display = 'flex';
+
+      setTimeout(() => {
+        document.getElementById('popup').style.display = 'none';
+      }, 2000);
+    }
+  </script>
+</body>
+</html>

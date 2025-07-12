@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login / Signup</title>
+  <style>
+    :root {
+      --dark-teal: rgb(43, 75, 84);
+      --muted-teal: rgb(92, 122, 115);
+      --sky-blue: rgb(50, 153, 197);
+      --turquoise: rgb(70, 200, 190);
+      --off-white-mint: rgb(233, 245, 239);
+      --cream-white: rgb(247, 244, 235);
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: url('https://wallpapercave.com/wp/wp14199750.jpg') no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background-color: var(--cream-white);
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+      position: relative;
+    }
+
+    h2 {
+      color: var(--dark-teal);
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.8rem;
+      margin: 0.5rem 0;
+      border: 1px solid var(--muted-teal);
+      border-radius: 8px;
+      outline: none;
+    }
+
+    button {
+      width: 100%;
+      padding: 0.8rem;
+      background-color: var(--sky-blue);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      margin-top: 1rem;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: var(--turquoise);
+    }
+
+    .toggle-link {
+      margin-top: 1rem;
+      text-align: center;
+      color: var(--muted-teal);
+    }
+
+    .toggle-link a {
+      color: var(--sky-blue);
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .toggle-link a:hover {
+      text-decoration: underline;
+    }
+
+    .form {
+      display: none;
+    }
+
+    .form.active {
+      display: block;
+    }
+
+    .error {
+      color: red;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+      text-align: center;
+    }
+
+    .login-info {
+      text-align: center;
+      background-color: var(--off-white-mint);
+      padding: 1rem;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .login-info button {
+      width: auto;
+      margin: 0.5rem 0.25rem;
+      padding: 0.5rem 1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container" id="main-container">
+    <!-- Login Info (if already logged in) -->
+    <!-- Will be inserted via JS -->
+
+    <!-- Login Form -->
+    <div id="login-form" class="form active">
+      <h2>Login</h2>
+      <input id="login-email" type="email" placeholder="Email" required />
+      <input id="login-password" type="password" placeholder="Password" required />
+      <button onclick="loginUser()">Log In</button>
+      <p id="login-error" class="error"></p>
+      <div class="toggle-link">
+        Don't have an account? <a href="#" onclick="toggleForm()">Sign up</a>
+      </div>
+    </div>
+
+    <!-- Signup Form -->
+    <div id="signup-form" class="form">
+      <h2>Sign Up</h2>
+      <input id="signup-name" type="text" placeholder="Full Name" required />
+      <input id="signup-email" type="email" placeholder="Email" required />
+      <input id="signup-password" type="password" placeholder="Password" required />
+      <button onclick="signupUser()">Sign Up</button>
+      <p id="signup-error" class="error"></p>
+      <div class="toggle-link">
+        Already have an account? <a href="#" onclick="toggleForm()">Login</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const sessionUser = localStorage.getItem("loggedInUser");
+      const username = localStorage.getItem("loggedInUserName");
+
+      if (sessionUser) {
+        const infoDiv = document.createElement("div");
+        infoDiv.className = "login-info";
+        infoDiv.innerHTML = `
+          ✅ You are already logged in as <strong>${username || sessionUser}</strong><br/>
+          <button onclick="goToHome()">Go to Home</button>
+          <button onclick="logoutUser()">Logout</button>
+        `;
+        document.getElementById("main-container").prepend(infoDiv);
+      }
+    });
+
+    function toggleForm() {
+      document.getElementById('login-error').textContent = "";
+      document.getElementById('signup-error').textContent = "";
+      document.getElementById('login-form').classList.toggle('active');
+      document.getElementById('signup-form').classList.toggle('active');
+    }
+
+    function isValidEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    function loginUser() {
+      const email = document.getElementById("login-email").value.trim();
+      const password = document.getElementById("login-password").value.trim();
+
+      if (!email || !password) {
+        document.getElementById("login-error").textContent = "⚠ Please fill all fields.";
+        return;
+      }
+
+      if (!isValidEmail(email)) {
+        document.getElementById("login-error").textContent = "⚠ Please include a valid email with '@'.";
+        return;
+      }
+
+      const users = JSON.parse(localStorage.getItem("users")) || [];
+      const matchedUser = users.find(u => u.email === email && u.password === password);
+
+      if (matchedUser) {
+        localStorage.setItem("loggedInUser", email);
+        localStorage.setItem("loggedInUserName", matchedUser.name || "");
+        window.location.href = "home.html";
+      } else {
+        document.getElementById("login-error").textContent = "❌ User not found or password is incorrect.";
+      }
+    }
+
+    function signupUser() {
+      const name = document.getElementById("signup-name").value.trim();
+      const email = document.getElementById("signup-email").value.trim();
+      const password = document.getElementById("signup-password").value.trim();
+
+      if (!name || !email || !password) {
+        document.getElementById("signup-error").textContent = "⚠ Please fill all fields.";
+        return;
+      }
+
+      if (!isValidEmail(email)) {
+        document.getElementById("signup-error").textContent = "⚠ Please include a valid email with '@'.";
+        return;
+      }
+
+      const users = JSON.parse(localStorage.getItem("users")) || [];
+      const userExists = users.find(u => u.email === email);
+
+      if (userExists) {
+        document.getElementById("signup-error").textContent = "⚠ User already exists. Please login.";
+        return;
+      }
+
+      users.push({ name, email, password });
+      localStorage.setItem("users", JSON.stringify(users));
+      localStorage.setItem("loggedInUser", email);
+      localStorage.setItem("loggedInUserName", name);
+      window.location.href = "home.html";
+    }
+
+    function logoutUser() {
+      localStorage.removeItem("loggedInUser");
+      localStorage.removeItem("loggedInUserName");
+      location.reload(); // Refresh to show login/signup
+    }
+
+    function goToHome() {
+      window.location.href = "home.html";
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Skill Swap Platform</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #2B4B54;
+      color: white;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #5C7A73;
+      padding: 10px 20px;
+    }
+
+    .navbar h1 {
+      margin: 0;
+    }
+
+    .profile-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 2px solid white;
+    }
+
+    .filter-bar {
+      background-color: #233A42;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .filter-bar select, .filter-bar input {
+      padding: 8px;
+      border-radius: 5px;
+      border: none;
+    }
+
+    .container {
+      padding: 20px;
+    }
+
+    .card {
+      background-color: #E9F5EF;
+      color: #2B4B54;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      padding: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .user-photo {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background-color: #cccccc;
+      border: 2px solid #5C7A73;
+    }
+
+    .user-details span {
+      display: block;
+    }
+
+    .skills span {
+      font-weight: bold;
+    }
+
+    .status-section {
+      text-align: right;
+    }
+
+    .pending { color: #3299C5; }
+    .accepted { color: #46C8BE; }
+    .rejected { color: red; }
+
+    .actions {
+      margin-top: 5px;
+    }
+
+    .actions button {
+      margin: 0 5px;
+      padding: 6px 12px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .accept {
+      background-color: #46C8BE;
+      color: white;
+    }
+
+    .reject {
+      background-color: red;
+      color: white;
+    }
+
+    .pagination {
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .pagination span {
+      margin: 0 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .highlight {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <h1>Skill Swap Platform</h1>
+    <div>
+      <a href="Home.html" style="color:white; margin-right: 20px;">Home</a>
+      <img src="https://i.imgur.com/3GvwNBf.png" alt="User Profile" class="profile-icon">
+    </div>
+  </div>
+
+  <div class="filter-bar">
+    <select id="statusFilter">
+      <option value="All">All</option>
+      <option value="Pending">Pending</option>
+      <option value="Accepted">Accepted</option>
+      <option value="Rejected">Rejected</option>
+    </select>
+    <input type="text" id="searchBox" placeholder="Search">
+  </div>
+
+  <div class="container" id="cardContainer">
+    <!-- Card 1 -->
+    <div class="card" data-status="Pending">
+      <div class="user-info">
+        <div class="user-photo"></div>
+        <div class="user-details">
+          <span><strong>Marc Demo</strong></span>
+          <span>Rating: 4.5/5</span>
+          <div class="skills">
+            <span>Skills Offered: JavaScript</span><br>
+            <span>Skill Wanted: Photoshop</span>
+          </div>
+        </div>
+      </div>
+      <div class="status-section">
+        <div class="status pending">Status: Pending</div>
+        <div class="actions">
+          <button class="accept">Accept</button>
+          <button class="reject">Reject</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="card" data-status="Rejected">
+      <div class="user-info">
+        <div class="user-photo"></div>
+        <div class="user-details">
+          <span><strong>name</strong></span>
+          <span>Rating: 3.9/5</span>
+          <div class="skills">
+            <span>Skills Offered:</span><br>
+            <span>Skill Wanted:</span>
+          </div>
+        </div>
+      </div>
+      <div class="status-section">
+        <div class="status rejected">Status: Rejected</div>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination">
+      <span>&lt;</span>
+      <span class="highlight">1</span>
+      <span>2</span>
+      <span>3</span>
+      <span>&gt;</span>
+    </div>
+  </div>
+
+  <script>
+    document.querySelectorAll(".accept").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const card = btn.closest(".card");
+        card.querySelector(".status").textContent = "Status: Accepted";
+        card.querySelector(".status").className = "status accepted";
+        card.dataset.status = "Accepted";
+        card.querySelector(".actions").style.display = "none";
+      });
+    });
+
+    document.querySelectorAll(".reject").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const card = btn.closest(".card");
+        card.querySelector(".status").textContent = "Status: Rejected";
+        card.querySelector(".status").className = "status rejected";
+        card.dataset.status = "Rejected";
+        card.querySelector(".actions").style.display = "none";
+      });
+    });
+
+    document.getElementById("statusFilter").addEventListener("change", function () {
+      const selected = this.value;
+      document.querySelectorAll(".card").forEach(card => {
+        const status = card.dataset.status;
+        card.style.display = (selected === "All" || selected === status) ? "flex" : "none";
+      });
+    });
+
+    document.getElementById("searchBox").addEventListener("input", function () {
+      const query = this.value.toLowerCase();
+      document.querySelectorAll(".card").forEach(card => {
+        const name = card.querySelector(".user-details strong").textContent.toLowerCase();
+        card.style.display = name.includes(query) ? "flex" : "none";
+      });
+    });
+  </script>
+</body>
+</html>

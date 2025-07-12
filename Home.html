@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SkillSwap Sidebar Filter</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+    :root {
+      --dark-teal: rgb(43, 75, 84);
+      --muted-teal: rgb(92, 122, 115);
+      --sky-blue: rgb(50, 153, 197);
+      --turquoise: rgb(70, 200, 190);
+      --off-white-mint: rgb(233, 245, 239);
+      --cream-white: rgb(247, 244, 235);
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--off-white-mint);
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+    header {
+      background-color: var(--dark-teal);
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .logo {
+      font-weight: bold;
+      font-size: 1.4rem;
+    }
+    .nav-links a {
+      color: white;
+      margin-left: 1.5rem;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .search-bar {
+      display: flex;
+      padding: 1rem;
+      justify-content: center;
+      background-color: var(--cream-white);
+      gap: 0.5rem;
+    }
+    .search-bar input {
+      padding: 0.5rem;
+      width: 40%;
+      border: 2px solid var(--sky-blue);
+      border-radius: 8px;
+    }
+    .search-bar button {
+      padding: 0.5rem 1rem;
+      background-color: var(--sky-blue);
+      border: none;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .container {
+      display: flex;
+      flex: 1;
+      min-height:0;
+      overflow: hidden;
+    }
+    .sidebar {
+  width: 250px;
+  background-color: var(--dark-teal);
+  color: white;
+  padding: 1.5rem;
+  overflow-y: auto;
+  height: calc(100vh - 80px); /* assuming your header is 80px */
+  position: sticky;
+  top: 80px; /* stick below the header */
+  flex-shrink: 0; /* 💥 prevent sidebar from shrinking */
+}
+
+    .sidebar h2 {
+      margin-bottom: 1rem;
+      font-size: 1.4rem;
+    }
+    .sidebar label {
+      display: block;
+      margin-bottom: 0.75rem;
+    }
+    .main-content {
+      flex-grow: 1;
+      padding: 2rem;
+      overflow-y: auto;
+    }
+    .user-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .user-card {
+      background-color: var(--cream-white);
+      border-left: 5px solid var(--sky-blue);
+      border-radius: 10px;
+      padding: 1rem;
+      width: 250px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      display: none;
+    }
+    .user-card h3 {
+      margin-bottom: 0.5rem;
+    }
+    .request-btn {
+      background-color: var(--turquoise);
+      border: none;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 0.5rem;
+    }
+    footer {
+      background-color: var(--muted-teal);
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      position: sticky;
+      bottom: 0;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">SkillSwap</div>
+    <div class="nav-links">
+      <a href="swaprequest.html">Swap Requests</a>
+      <a href="login.html">Login</a>
+      <a href="profileview.html">
+        <img src="https://via.placeholder.com/40" style="border-radius: 50%; vertical-align: middle;">
+      </a>
+    </div>
+  </header>
+
+  <div class="search-bar">
+    <input type="text" id="searchInput" placeholder="Search by skill or domain...">
+    <ul id="suggestions" style="position:absolute; background:white; list-style:none; margin-top:0.25rem; width:40%; max-height:150px; overflow-y:auto; border:1px solid #ccc; border-radius:0.5rem; z-index:1000; display:none;"></ul>
+    <button onclick="filterCards()">Search</button>
+  </div>
+
+  <div class="container">
+    <aside class="sidebar">
+      <h2>Domains</h2>
+      <label><input type="checkbox" value="Music" onchange="filterCards()"> Music</label>
+      <label><input type="checkbox" value="Languages" onchange="filterCards()"> Languages</label>
+      <label><input type="checkbox" value="Tech" onchange="filterCards()"> Tech</label>
+      <label><input type="checkbox" value="Design" onchange="filterCards()"> Design</label>
+      <label><input type="checkbox" value="Development" onchange="filterCards()"> Development</label>
+      <label><input type="checkbox" value="Marketing" onchange="filterCards()"> Marketing</label>
+      <label><input type="checkbox" value="Writing" onchange="filterCards()"> Writing</label>
+      <label><input type="checkbox" value="Education" onchange="filterCards()"> Education</label>
+    </aside>
+
+    <main class="main-content">
+      <div class="user-list">
+        <div class="user-card" data-domain="Music" data-skills="singing video editing">
+          <h3>Marc Demo</h3>
+          <p><strong>Offers:</strong> Singing, Video Editing</p>
+          <p><strong>Wants:</strong> Photoshop</p>
+          <button class="request-btn">Request</button>
+        </div>
+        <div class="user-card" data-domain="Music" data-skills="guitar singing">
+          <h3>Jasmine R</h3>
+          <p><strong>Offers:</strong> Guitar, Singing</p>
+          <p><strong>Wants:</strong> Video Editing</p>
+          <button class="request-btn">Request</button>
+        </div>
+        <div class="user-card" data-domain="Music" data-skills="piano music theory">
+          <h3>Ethan N</h3>
+          <p><strong>Offers:</strong> Piano, Music Theory</p>
+          <p><strong>Wants:</strong> Singing</p>
+          <button class="request-btn">Request</button>
+        </div>
+        <!-- Music -->
+<div class="user-card" data-domain="Music" data-skills="piano music theory">
+  <h3>Ethan N</h3>
+  <p><strong>Offers:</strong> Piano, Music Theory</p>
+  <p><strong>Wants:</strong> Singing</p>
+  <button class="request-btn">Request</button>
+</div>
+
+<div class="user-card" data-domain="Music" data-skills="guitar composition">
+  <h3>Jade R</h3>
+  <p><strong>Offers:</strong> Guitar, Composition</p>
+  <p><strong>Wants:</strong> Music Production</p>
+  <button class="request-btn">Request</button>
+</div>
+
+<div class="user-card" data-domain="Music" data-skills="violin performance">
+  <h3>Leo M</h3>
+  <p><strong>Offers:</strong> Violin, Performance Coaching</p>
+  <p><strong>Wants:</strong> Digital Mixing</p>
+  <button class="request-btn">Request</button>
+</div>
+
+<!-- Languages -->
+<div class="user-card" data-domain="Languages" data-skills="french spanish">
+  <h3>Sophia T</h3>
+  <p><strong>Offers:</strong> French, Spanish</p>
+  <p><strong>Wants:</strong> Mandarin</p>
+  <button class="request-btn">Request</button>
+</div>
+
+<div class="user-card" data-domain="Languages" data-skills="german public speaking">
+  <h3>Markus L</h3>
+  <p><strong>Offers:</strong> German, Public Speaking</p>
+  <p><strong>Wants:</strong> English Accent Coaching</p>
+  <button class="request-btn">Request</button>
+</div>
+
+<!-- Tech -->
+<div class="user-card" data-domain="Tech" data-skills="cybersecurity network security">
+  <h3>Arjun K</h3>
+  <p><strong>Offers:</strong> Cybersecurity, Network Security</p>
+  <p><strong>Wants:</strong> IoT Programming</p>
+  <button class="request-btn">Request</button>
+</div>
+
+<div class="user-card" data-domain="Tech" data-skills="cloud computing">
+  <h3>Alice W</h3>
+  <p><strong>Offers:</strong> Cloud Computing</p>
+  <p><strong>Wants:</strong> Blockchain Basics</p>
+  <button class="request-btn">Request</button>
+</div>
+
+<!-- Design -->
+<div class="user-card" data-domain="Design" data-skills="ux ui figma">
+  <h3>Rina V</h3>
+  <p><strong>Offers:</strong> UX/UI Design, Figma</p>
+  <p><strong>Wants:</strong> Animation Design</p>
+  <button class="request-btn">Request</button>
+</div>
+
+<div class="user-card" data-domain="Design" data-skills="branding logo design">
+  <h3>Chris D</h3>
+  <p><strong>Offers:</strong> Branding, Logo Design</p>
+  <p><strong>Wants:</strong> 3D Modeling</p>
+  <button class="request-btn">Request</button>
+</div>
+
+<!-- Development -->
+<div class="user-card" data-domain="Development" data-skills="fullstack react">
+  <h3>Samantha G</h3>
+  <p><strong>Offers:</strong> Fullstack, React</p>
+  <p><strong>Wants:</strong> AI Integration</p>
+  <button class="request-btn">Request</button>
+</div>
+
+<div class="user-card" data-domain="Development" data-skills="android kotlin">
+  <h3>Nikhil B</h3>
+  <p><strong>Offers:</strong> Android, Kotlin</p>
+  <p><strong>Wants:</strong> Backend API Development</p>
+  <button class="request-btn">Request</button>
+</div>
+
+<!-- Marketing -->
+<div class="user-card" data-domain="Marketing" data-skills="seo content marketing">
+  <h3>Priya S</h3>
+  <p><strong>Offers:</strong> SEO, Content Marketing</p>
+  <p><strong>Wants:</strong> Paid Ads Strategy</p>
+  <button class="request-btn">Request</button>
+</div>
+
+<div class="user-card" data-domain="Marketing" data-skills="social media branding">
+  <h3>Jacob F</h3>
+  <p><strong>Offers:</strong> Social Media, Branding</p>
+  <p><strong>Wants:</strong> Influencer Marketing</p>
+  <button class="request-btn">Request</button>
+</div>
+
+<!-- Writing -->
+<div class="user-card" data-domain="Writing" data-skills="creative writing editing">
+  <h3>Lena C</h3>
+  <p><strong>Offers:</strong> Creative Writing, Editing</p>
+  <p><strong>Wants:</strong> Scriptwriting</p>
+  <button class="request-btn">Request</button>
+</div>
+
+<div class="user-card" data-domain="Writing" data-skills="technical writing">
+  <h3>Omar Z</h3>
+  <p><strong>Offers:</strong> Technical Writing</p>
+  <p><strong>Wants:</strong> UX Copywriting</p>
+  <button class="request-btn">Request</button>
+</div>
+
+<!-- Education -->
+<div class="user-card" data-domain="Education" data-skills="math tutoring physics">
+  <h3>Maya P</h3>
+  <p><strong>Offers:</strong> Math Tutoring, Physics</p>
+  <p><strong>Wants:</strong> Online Teaching Tools</p>
+  <button class="request-btn">Request</button>
+</div>
+
+<div class="user-card" data-domain="Education" data-skills="pedagogy curriculum design">
+  <h3>Daniel J</h3>
+  <p><strong>Offers:</strong> Pedagogy, Curriculum Design</p>
+  <p><strong>Wants:</strong> EdTech Platforms</p>
+  <button class="request-btn">Request</button>
+</div>
+
+      </div>
+    </main>
+  </div>
+
+  <footer>
+    <p>© 2025 SkillSwap. All rights reserved.</p>
+  </footer>
+
+  <script>
+    const searchInput = document.getElementById('searchInput');
+    const suggestions = document.getElementById('suggestions');
+    const cards = document.querySelectorAll('.user-card');
+    const skills = [
+      'Photoshop', 'French', 'Public Speaking', 'Coding',
+      'Guitar', 'Sketching', 'UX', 'UI', 'Figma',
+      'SEO', 'Singing', 'Video Editing', 'Illustration'
+    ];
+
+    searchInput.addEventListener('input', () => {
+      const query = searchInput.value.toLowerCase();
+      const matches = skills.filter(skill => skill.toLowerCase().includes(query));
+
+      if (query && matches.length > 0) {
+        suggestions.innerHTML = matches.map(skill => `<li style="padding: 0.5rem; cursor: pointer;" onclick="selectSuggestion('${skill}')">${skill}</li>`).join('');
+        suggestions.style.display = 'block';
+      } else {
+        suggestions.style.display = 'none';
+      }
+
+      filterCards();
+    });
+
+    function selectSuggestion(skill) {
+      searchInput.value = skill;
+      suggestions.style.display = 'none';
+      filterCards();
+    }
+
+    function filterCards() {
+      const selectedDomains = Array.from(document.querySelectorAll('.sidebar input:checked')).map(cb => cb.value.toLowerCase());
+      const searchText = document.getElementById('searchInput').value.toLowerCase();
+
+      cards.forEach(card => {
+        const domain = card.getAttribute('data-domain').toLowerCase();
+        const skills = card.getAttribute('data-skills').toLowerCase();
+
+        const matchesDomain = selectedDomains.length === 0 || selectedDomains.includes(domain);
+        const matchesSearch = searchText === '' || skills.includes(searchText);
+
+        card.style.display = matchesDomain && matchesSearch ? 'block' : 'none';
+      });
+    }
+
+    window.addEventListener('click', (e) => {
+      if (!suggestions.contains(e.target) && e.target !== searchInput) {
+        suggestions.style.display = 'none';
+      }
+    });
+
+    function showLoginPopup() {
+      const popup = document.createElement("div");
+      popup.innerHTML = `
+        <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 9999;">
+          <div style="background: white; color: black; padding: 20px 30px; border-radius: 10px; text-align: center;">
+            <p>Please login to send a request.</p>
+            <button onclick="window.location.href='login.html'" style="padding: 8px 16px; background: teal; color: white; border: none; border-radius: 5px;">Login</button>
+          </div>
+        </div>`;
+      document.body.appendChild(popup);
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const buttons = document.querySelectorAll(".request-btn");
+
+      const isLoggedIn = localStorage.getItem("loggedInUser") !== null;
+
+      buttons.forEach(button => {
+        button.addEventListener("click", (e) => {
+          e.preventDefault();
+
+          if (!isLoggedIn) {
+            showLoginPopup();
+          } else {
+           window.location.href = "profile.html";
+             // Replace with actual logic later
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>

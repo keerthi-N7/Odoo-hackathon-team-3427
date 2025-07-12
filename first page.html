@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Skillswap</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: rgb(43, 75, 84); /* Dark Teal */
+      color: rgb(233, 255, 243); /* Off-White Mint */
+      font-family: 'Playfair Display', serif;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    h1 {
+      font-size: 7rem;
+      margin-bottom: 50px;
+      letter-spacing: 2px;
+    }
+    h2{
+      font-size:1rem;
+      font-family:italic;
+
+    }
+    .arrow-button {
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .arrow-button:hover {
+      transform: translateX(8px);
+    }
+
+    svg {
+      width: 50px;
+      height: 50px;
+      fill: rgb(233, 255, 243);
+      transition: fill 0.3s ease;
+    }
+
+    .arrow-button:hover svg {
+      fill: rgb(70, 200, 190); /* Turquoise */
+    }
+
+    a {
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>SKILLSWAP</h1>
+  <h2>A website where you can swap your skills and much more</h2>
+  <a href="home.html" aria-label="Go to home page">
+    <button class="arrow-button">
+      <!-- RIGHT Arrow SVG Icon -->
+      <svg viewBox="0 0 24 24">
+        <path d="M10 6l6 6-6 6" />
+      </svg>
+    </button>
+  </a>
+</body>
+</html>
